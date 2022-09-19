@@ -1,40 +1,18 @@
-class User {
-	constructor(name = "", lastname = "", pets = [], books = []) {
-		this.name = name;
-		this.lastname = lastname;
-		this.pets = pets;
-		this.books = books;
-	}
-	getFullName() {
-		return this.name + " " + this.lastname;
-	}
-	addPet(pet) {
-		this.pets.push(pet);
-	}
-	countPets() {
-		return this.pets.length;
-	}
-	addBook(name, author) {
-		this.books.push({
-			name: name,
-			author: author
-		})
-	}
-	getBookNames() {
-		return this.books.map(el => el.name);
-	}
-}
+const Container = require("./container.js");
+
+let container = new Container("./products.json");
 
 
-let user = new User("pablo", "choconi", ["ruby", "mimi"], [{name: "EL Horror de Insmouth", author: "H.P.Lovecraft"}]);
-
-user.addPet("cati");
-user.addBook("El Estudio en Escarlata","Arthur Conan Doyle")
-console.log("Usuario: " + user.getFullName());
-console.log("Numero de mascotas: " + user.countPets());
-console.log("Libros leidos: ");
-user.getBookNames().forEach(book => {
-	console.log(book);
-});
-
-
+container.readFile();
+setTimeout(() =>  {
+	//SAVE
+	//container.save({name: "lapiz", price: 20});
+	//GET_BY_ID
+	//console.log(container.getById(1));
+	//GET_ALL
+	//console.log(container.getAll());
+	//DELETE_BY_ID
+	//container.deleteById(1);
+	//DELETE_ALL
+	//container.deleteAll();
+}, 1000);
