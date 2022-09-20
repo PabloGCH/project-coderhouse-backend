@@ -2,17 +2,17 @@ const Container = require("./container.js");
 
 let container = new Container("./products.json");
 
-
-container.readFile();
-setTimeout(() =>  {
+async function test() {
 	//SAVE
-	//container.save({name: "lapiz", price: 20});
-	//GET_BY_ID
-	//console.log(container.getById(1));
+	//let newid = await container.save({name: "product", price: 10});
+	//console.log("ID del objeto agregado es: " + newid);
 	//GET_ALL
-	//console.log(container.getAll());
+	//console.log(await container.getAll())
+	//GET_BY_ID
+	//console.log(await container.getById(2));
 	//DELETE_BY_ID
-	//container.deleteById(1);
+	//await container.deleteById(5);
 	//DELETE_ALL
-	//container.deleteAll();
-}, 1000);
+	//await container.deleteAll();
+}
+test();

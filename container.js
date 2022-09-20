@@ -3,25 +3,24 @@ const fs = require('fs');
 class Container {
 	constructor(fileDir) {
 		this.fileDir = fileDir;
-		this.currentFile = {};
 	}
 
 	async readFile() {
 		try {
-			this.currentFile = JSON.parse(await fs.promises.readFile(this.fileDir, "utf-8"));
+			return JSON.parse(await fs.promises.readFile(this.fileDir, "utf-8"));
 		}
 		catch {
 			console.log("Failed to load file, creating new one");
-			this.currentFile = {
+			let file = {
 				lastId: 0,
 				products: []
 			};
-			this.writeFile();
+			this.writeFile(file);
 		}
 	}
-	async writeFile() {
+	async writeFile(file) {
 		try {
-			await fs.promises.writeFile(this.fileDir, JSON.stringify(this.currentFile, null, "	"));
+			await fs.promises.writeFile(this.fileDir, JSON.stringify(file, null, "	"));
 		}
 		catch {
 			console.log("Failed to write file")
@@ -29,14 +28,15 @@ class Container {
 	}
 	async save(object) {
 		try {
-			this.currentFile.lastId++;
+			let file = await this.readFile();
+			file.lastId++;
 			let newObject = {
-				id: this.currentFile.lastId,
+				id: file.lastId,
 				...object
 			};
-			this.currentFile.products.push(newObject);
-			this.writeFile();
-			return this.currentFile.lastId;
+			file.products.push(newObject);
+			this.writeFile(file);
+			return file.lastId;
 		}
 		catch {
 			console.log("Failed to save object")
@@ -44,40 +44,45 @@ class Container {
 	}
 	async getById(id) {
 		try {
-			return this.currentFile.products.find(product => product.id == id) || null;
+			let file = await this.readFile();
+			return file.products.find(product => product.id == id) || null;
 		}
 		catch {
-			console.log("Failed to try to find object")
+			console.log("Failed to find object")
 		}
 	}
 	async getAll() {
 		try {
-			return this.currentFile.products;
+			let file = await this.readFile();
+			return file.products;
 		}
 		catch {
-			console.log("Failed to try to get object")
+			console.log("Failed to get objects")
 		}
 	}
 	async deleteById(id) {
 		try {
-			let index = this.currentFile.products.findIndex(product => product.id == id);
+			let file = await this.readFile();
+			let index = file.products.findIndex(product => product.id == id);
 			if(index == -1) {
 				console.log("El producto no existe");
 			} else {
-				console.log("El product fue eliminado");
-				this.currentFile.products.splice(index, 1)
-				this.writeFile();
+				console.log("El producto fue eliminado");
+				file.products.splice(index, 1)
+				this.writeFile(file);
 			}
 		}
 		catch {
-			console.log("Failed to try to delete object");
+			console.log("Failed delete object");
 		}
 	}
 	async deleteAll() {
 		try {
-			this.currentFile.lastId = 0;
-			this.currentFile.products = [];
-			this.writeFile();
+			let file = {
+				lastId: 0,
+				products: []
+			};
+			this.writeFile(file);
 		}
 		catch {
 			console.log("Failed to delete objects");
