@@ -9,13 +9,16 @@ class Container {
 		try {
 			return JSON.parse(await fs.promises.readFile(this.fileDir, "utf-8"));
 		}
-		catch {
+		catch(err) {
+			console.log(err);
 			console.log("Failed to load file, creating new one");
+			/*
 			let file = {
 				lastId: 0,
 				products: []
 			};
 			this.writeFile(file);
+			*/
 		}
 	}
 	async writeFile(file) {
@@ -86,6 +89,17 @@ class Container {
 		}
 		catch {
 			console.log("Failed to delete objects");
+		}
+	}
+	async randomProduct() {
+		try {
+			let file = await this.readFile();
+			console.log(Math.round(Math.random() * (file.products.length - 1)))
+			let product = file.products[Math.round(Math.random() * (file.products.length - 1))];
+			return product;
+		}
+		catch {
+			console.log("failed to get product")
 		}
 	}
 }
