@@ -57,14 +57,6 @@ app.delete("/api/products/:id", (req, res) => {
 	}) 
 })
 
-/*
-app.get("/productoRandom", (req, res) => {
-	container.randomProduct().then(data => {
-		res.send(data);
-	})
-})
-*/
-
 
 app.listen(4000, () => {
 	console.log("Server listening on port 4000")
