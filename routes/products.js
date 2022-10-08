@@ -32,11 +32,7 @@ router.post("/", (req, res) => {
 router.put("/:id", (req,res) => {
 	let {id} = req.params;
 	container.edit(req.body, id).then(data => {
-		if(data.success) {
-			res.send("Producto modificado");
-		} else {
-			res.send("Error al modificar producto");
-		}
+		res.send(data);
 	})
 })
 

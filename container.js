@@ -34,14 +34,31 @@ class Container {
 			let file = await this.readFile();
 			file.lastId++;
 			let newObject = {
-				id: file.lastId,
-				...object
+				id: file.lastId
 			};
-			file.products.push(newObject);
-			this.writeFile(file);
+			console.log(object)
+			if(!object.name || !object.price) {
+				throw "Didn't provide proper name and price"
+			} else {
+				if(typeof(object.name) == "string") {
+					newObject.name = object.name;
+				} else {
+					throw "Name must be a string";
+				}
+				if(typeof(object.price) == "number") {
+					newObject.price = object.price;
+				} else {
+					throw "Price must be a number";
+				}
+				file.products.push(newObject);
+				this.writeFile(file);
+			}
 			return newObject;
 		}
-		catch {
+		catch(err) {
+			if(err) {
+				return err;
+			}
 			return "Failed to save object";
 		}
 	}
@@ -82,13 +99,21 @@ class Container {
 	async edit(object, id) {
 		try {
 			let file = await this.readFile();
-			Object.assign(file.products[id], object)
-			this.writeFile(file);
-			return {success: true};
+			let index = file.products.findIndex(product => product.id == id);
+			if(index != -1) {
+				Object.assign(file.products[index], object)
+				this.writeFile(file);
+				return file.products[index];
+			} else {
+				throw "Product ID invalid";
+			}
 		} 
 		catch(err) {
-			console.log(err)
-			return {success: false};
+			if(err) {
+				return err;
+			} else {
+				return "Failed to modify product";
+			}
 		}
 	}
 
