@@ -39,10 +39,10 @@ class Container {
 			};
 			file.products.push(newObject);
 			this.writeFile(file);
-			return file.lastId;
+			return newObject;
 		}
 		catch {
-			console.log("Failed to save object")
+			return "Failed to save object";
 		}
 	}
 	async getById(id) {
@@ -68,17 +68,30 @@ class Container {
 			let file = await this.readFile();
 			let index = file.products.findIndex(product => product.id == id);
 			if(index == -1) {
-				console.log("El producto no existe");
+				return {success: false};
 			} else {
-				console.log("El producto fue eliminado");
 				file.products.splice(index, 1)
 				this.writeFile(file);
+				return {success: true};
 			}
 		}
 		catch {
-			console.log("Failed delete object");
+			return {success: false};
 		}
 	}
+	async edit(object, id) {
+		try {
+			let file = await this.readFile();
+			Object.assign(file.products[id], object)
+			this.writeFile(file);
+			return {success: true};
+		} 
+		catch(err) {
+			console.log(err)
+			return {success: false};
+		}
+	}
+
 	async deleteAll() {
 		try {
 			let file = {

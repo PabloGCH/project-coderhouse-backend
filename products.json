@@ -1,15 +1,18 @@
 {
-	"lastId": 0,
+	"lastId": 3,
 	"products": [
 		{
+			"id": 1,
 			"name": "Lapiz",
 			"price": 20
 		},
 		{
+			"id": 2,
 			"name": "Goma",
-			"price": 30
+			"price": 2,
 		},
 		{
+			"id": 3,
 			"name": "Regla",
 			"price": 40
 		}
